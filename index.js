@@ -45,7 +45,7 @@ const plugin = postcss.plugin('postcss-simple-media', (opts = { }) => {
         newAtRule.append(content)
 
       } else {
-        newAtRule.append(atRule)
+        atRule.walkRules(rule => newAtRule.append(rule))
       }
       
       stack.set(params, newAtRule)
