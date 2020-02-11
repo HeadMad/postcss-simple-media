@@ -1,6 +1,6 @@
 let postcss = require('postcss')
 
-module.exports = postcss.plugin('PLUGIN_NAME', (opts = { }) => {
+module.exports = postcss.plugin('postcss-simple-media', (opts = { }) => {
 
   // Work with options here
 
