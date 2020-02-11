@@ -1,51 +1,81 @@
-# PostCSS Plugin Boilerplate
+# Make Your Media Simple
 
-<img align="right" width="135" height="95"
-     title="Philosopher’s stone, logo of PostCSS"
-     src="http://postcss.github.io/postcss/logo-leftp.svg">
+[PostCSS] plugin postcss-simple-media.
 
-Сreate new PostCSS plugins in a few steps:
+[PostCSS]: https://github.com/postcss/postcss
 
-1. Clone this repository:
+```css
+@sm 960- {
+  .foo {
+    height: 100%;
+  }
+}
 
-    ```sh
-    git clone https://github.com/postcss/postcss-plugin-boilerplate.git
-    ```
+.bar {
+  height: 64px;
+  @sm 960+ {
+    width: 100%;
+    height: 48px;
+  }
+}
 
-2. Execute the wizard script. It will ask you a few questions
-   and fill all files with your data.
+.baz {
+  height: 32px;
+  @sm 540-960 {
+    color: #ccc;
+    font-size: 1.4em;
+  }
+}
+```
 
-    ```sh
-    node ./postcss-plugin-boilerplate/start
-    ```
+```css
+.bar {
+  height: 64px;
+}
 
-    Call it with `--yarn` argument, if you prefer [yarn](https://yarnpkg.com/)
-    package manager:
+.baz {
+  height: 32px;
+}
 
-    ```sh
-    node ./postcss-plugin-boilerplate/start --yarn
-    ```
+@media (min-width: 960px) {
+  .bar {
+    width: 100%;
+    height: 48px;
+  }
+}
 
-    Or use `--no-install` if you want to skip dependencies installation.
+@media (max-width: 960px) {
+  .foo {
+    height: 100%;
+  }
+}
 
-3. Your plugin repository will now have a clean Git history.
-[Create the GitHub repository](https://github.com/new)
-and push your project there.
+@media (min-width: 540) and (max-width: 960px) {
+  .baz {
+    color: #ccc;
+    font-size: 1.4em;
+  }
+}
+```
 
-4. Add your project to [Travis CI](https://travis-ci.org).
+## Usage
 
-5. Write some code to `index.js` and tests to `index.test.js`.
+Check you project for existed PostCSS config: `postcss.config.js`
+in the project root, `"postcss"` section in `package.json`
+or `postcss` in bundle config.
 
-6. Execute `npm test` command
+If you already use PostCSS, add the plugin to plugins list:
 
-7. Add input and output CSS examples to `README.md`.
+```diff
+module.exports = {
+  plugins: [
++   require('PLUGIN_NAME'),
+    require('autoprefixer')
+  ]
+}
+```
 
-8. Add options descriptions if your plugin has them.
+If you do not use PostCSS, add it according to [official docs]
+and set this plugin in settings.
 
-9. Fill `CHANGELOG.md` with initial version and release it to npm.
-
-10. Fork [PostCSS](https://github.com/postcss/postcss), add your plugin to the
-[Plugins list](https://github.com/postcss/postcss/blob/master/docs/plugins.md)
-and send a pull request.
-
-11. Follow [@PostCSS](https://twitter.com/postcss) to get the latest updates.
+[official docs]: https://github.com/postcss/postcss#usage
