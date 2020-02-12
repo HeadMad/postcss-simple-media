@@ -31,30 +31,40 @@ const makeParams = params => {
 
 
 const plugin = postcss.plugin('postcss-simple-media', (opts = { }) => {
-  const sm = opts.atrule || 'sm'
+  const atrule = opts.atrule || 'sm'
+  const prop = opts.atrule || 'media'
   return root => {
     const stack = new Map()
 
-    root.walkAtRules(sm, atRule => {
-      const params = makeParams(atRule.params)
-      const newAtRule = stack.has(params)
-        ? stack.get(params)
-        : postcss.atRule({name: 'media', params})
+    root.walkRules(rule => {
+      let newAtRule, params, newRule
 
-      if (atRule.parent.type === 'rule') {
-        content = postcss.rule({selector: atRule.parent.selector})
-        atRule.walkDecls(decl => content.append(decl))
-        newAtRule.append(content)
+      rule.walkDecls(decl => {
+        if (decl.prop === prop) {
+          if (newAtRule) {
+            newAtRule.append(newRule)
+            stack.set(params, newAtRule)
+          }
 
-      } else {
-        atRule.walkRules(rule => newAtRule.append(rule))
+          params = makeParams(decl.value)
+          newAtRule = stack.has(params)
+            ? stack.get(params)
+            : postcss.atRule({name: 'media', params})
+
+          newRule = postcss.rule({selector: rule.selector})
+          decl.remove()
+          return
+        }
+        if (newRule) newRule.append(decl)
+      })
+
+      if (newAtRule) {
+        newAtRule.append(newRule)
+        stack.set(params, newAtRule)
       }
-      
-      stack.set(params, newAtRule)
-
-      atRule.remove()
-      Array.from(stack).forEach(([_, atRule]) => root.append(atRule))
     })
+    
+    Array.from(stack).forEach(([_, atRule]) => root.append(atRule))
 
   }
 })
