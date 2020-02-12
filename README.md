@@ -3,57 +3,82 @@
 [PostCSS] plugin postcss-simple-media.
 
 [PostCSS]: https://github.com/postcss/postcss
+## About
+All styles properties declared after the media property
+to the end of the rule or to the next media property,
+will be placed in the media query with the specified parameters
 
 ```css
-@sm 960- {
-  .foo {
-    height: 100%;
-  }
+
+.row {
+  display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+  margin: auto;
+
+  media: 1200+;
+  width: 80%;
+  
+  media: 960-;
+  width: 100%;
+  height: 100%;
 }
 
-.bar {
-  height: 64px;
-  @sm 960+ {
-    width: 100%;
-    height: 48px;
-  }
+.col {
+  width: 10%;
+
+  media: 960-, (orientation: landscape);
+  width: 20%;
+
+  media: only screen 480-640;
+  width: 25%;
+
+  media: !handheld
+  font-size: 1.5
 }
 
-.baz {
-  height: 32px;
-  @sm 540-960 {
-    color: #ccc;
-    font-size: 1.4em;
-  }
-}
 ```
 
 ```css
-.bar {
-  height: 64px;
+.row {
+  display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+  margin: auto;
 }
 
-.baz {
-  height: 32px;
+.col {
+  width: 10%;
 }
 
-@media (min-width: 960px) {
-  .bar {
-    width: 100%;
-    height: 48px;
+@media (min-width: 1200px) {
+  .row {
+    width: 80%;
   }
 }
 
 @media (max-width: 960px) {
-  .foo {
+  .row {
+    width: 100%;
     height: 100%;
   }
 }
 
-@media (min-width: 540) and (max-width: 960px) {
-  .baz {
-    color: #ccc;
-    font-size: 1.4em;
+@media (max-width: 960px), (orientation: landscape) {
+  .col {
+    width: 20%;
+  }
+}
+
+@media only screen and (min-width: 480px) and (max-width: 640px) {
+  .col {
+    width: 25%;
+  }
+}
+
+@media not handheld {
+  .col {
+    font-size: 1.5;
   }
 }
 ```
