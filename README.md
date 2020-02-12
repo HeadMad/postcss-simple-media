@@ -42,8 +42,8 @@ will be placed in the media query with the specified parameters
 ```css
 .row {
   display: flex;
-	justify-content: space-between;
-	flex-wrap: wrap;
+  justify-content: space-between;
+  flex-wrap: wrap;
   margin: auto;
 }
 
