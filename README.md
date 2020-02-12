@@ -12,8 +12,8 @@ will be placed in the media query with the specified parameters
 
 .row {
   display: flex;
-	justify-content: space-between;
-	flex-wrap: wrap;
+  justify-content: space-between;
+  flex-wrap: wrap;
   margin: auto;
 
   media: 1200+;
