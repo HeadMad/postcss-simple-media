@@ -2,13 +2,14 @@ let postcss = require('postcss')
 
 const isRange = /^\d+-\d+$/
 const isLimit = /^(\d+)([+-])?$/
-const inBrackets = /^\(\s*(.+)\s*\)$/
+const inBrackets = /^\((.+)\)$/
+const isNot = /^!(.+)$/
 
 
 const makeMedia = arg => {
   if (inBrackets.test(arg)) {
     let match = arg.match(inBrackets)
-    return `(${makeMedia(match[1])})`
+    return `(${makeMedia(match[1]).trim()})`
 
   } else if (isRange.test(arg)) {
     let args = arg.split('-').sort((a, b) => a - b)
@@ -20,8 +21,9 @@ const makeMedia = arg => {
       ? `(${matches[2] === '+' ? 'min' : 'max'}-width: ${matches[1]}px)`
       : `(width: ${matches[1]}px)`
 
-  } else if (arg.startsWith('!') && arg.length > 1) {
-    return arg.replace('!', 'not ')
+  } else if (isNot.test(arg)) {
+    let match = arg.match(isNot)
+    return `not ${makeMedia(match[1].trim())}`
   }
   
   return arg
@@ -29,7 +31,8 @@ const makeMedia = arg => {
 
 const parseParam = param => {
   const set = new Set(postcss.list.space(param))
-  return [...set].map(item => makeMedia(item)).join(' and ')
+  return [...set].map(item => makeMedia(item))
+    .join(' and ').replace(/\bonly and/g, 'only')
 }
 
 const makeParams = params => {
