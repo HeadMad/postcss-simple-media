@@ -1,7 +1,7 @@
 let postcss = require('postcss')
 
 const isRange = /^\d+-\d+$/
-const isLimit = /^(\d+)([+-])$/
+const isLimit = /^(\d+)([+-])?$/
 
 
 const makeMedia = arg => {
@@ -11,7 +11,9 @@ const makeMedia = arg => {
 
   } else if (isLimit.test(arg)) {
     let matches = arg.match(isLimit)
-    return `(${matches[2] === '+' ? 'min' : 'max'}-width: ${matches[1]}px)`
+    return matches[2]
+      ? `(${matches[2] === '+' ? 'min' : 'max'}-width: ${matches[1]}px)`
+      : `(width: ${matches[1]}px)`
   }
   
   return arg
