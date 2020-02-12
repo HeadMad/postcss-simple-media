@@ -4,8 +4,8 @@
 
 [PostCSS]: https://github.com/postcss/postcss
 ## About
-All styles properties declared after the media property
-to the end of the rule or to the next media property,
+All styles properties declared after the media property<br>
+to the end of the rule or to the next media property,<br>
 will be placed in the media query with the specified parameters
 
 ```css
@@ -94,7 +94,7 @@ If you already use PostCSS, add the plugin to plugins list:
 ```diff
 module.exports = {
   plugins: [
-+   require('PLUGIN_NAME'),
++   require('postcss-simle-media'),
     require('autoprefixer')
   ]
 }
