@@ -6,7 +6,7 @@ const inBrackets = /^\((.+)\)$/
 const isNot = /^!(.+)$/
 
 
-const makeMedia = arg => {
+const makeMedia = (arg) => {
   if (inBrackets.test(arg)) {
     let match = arg.match(inBrackets)
     return `(${makeMedia(match[1]).trim()})`
@@ -29,28 +29,30 @@ const makeMedia = arg => {
   return arg
 }
 
-const parseParam = param => {
-  const set = new Set(postcss.list.space(param))
-  return [...set].map(item => makeMedia(item))
-    .join(' and ').replace(/\bonly and/g, 'only')
+const parseParam = (param) => {
+  return postcss.list.space(param)
+    .map((item) => makeMedia(item))
+    .join(' and ')
+    .replace(/\bonly and\b/g, 'only')
 }
 
-const makeParams = params => {
-  const set = new Set(postcss.list.comma(params))
-  return [...set].map(param => parseParam(param)).join(', ')
+const makeParams = (params) => {
+  return postcss.list.comma(params)
+    .map((param) => parseParam(param))
+    .join(', ')
 }
 
 
-const plugin = postcss.plugin('postcss-simple-media', (opts = { }) => {
+const simpleMedia = postcss.plugin('postcss-simple-media', (opts = { }) => {
   const atrule = opts.atrule || 'sm'
   const prop = opts.atrule || 'media'
-  return root => {
+  return (root) => {
     const stack = new Map()
 
-    root.walkRules(rule => {
+    root.walkRules((rule) => {
       let newAtRule, params, newRule
 
-      rule.walkDecls(decl => {
+      rule.walkDecls((decl) => {
         if (decl.prop === prop) {
           if (newAtRule) {
             newAtRule.append(newRule)
@@ -80,4 +82,4 @@ const plugin = postcss.plugin('postcss-simple-media', (opts = { }) => {
   }
 })
 
-module.exports = plugin
+module.exports = simpleMedia
