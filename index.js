@@ -5,7 +5,11 @@ const isLimit = /^(\d+)([+-])?$/
 const inBrackets = /^\((.+)\)$/
 const isNot = /^!(.+)$/
 
-
+/**
+ * Parse splittet by comma and space input
+ * @param {String} arg value of declaration property
+ * @return {String} params of media query
+ */
 const makeMedia = (arg) => {
   if (inBrackets.test(arg)) {
     let match = arg.match(inBrackets)
@@ -29,56 +33,96 @@ const makeMedia = (arg) => {
   return arg
 }
 
-const parseParam = (param) => {
+/**
+ * Split input by space
+ * @param {String} param value of declaration prop, splitted by comma
+ * @return {String} 
+ */
+const parseSpaceParams = (param) => {
   return postcss.list.space(param)
     .map((item) => makeMedia(item))
     .join(' and ')
     .replace(/\bonly and\b/g, 'only')
 }
 
-const makeParams = (params) => {
+/**
+ * Split input by comma and pares they
+ * @param {String} params value of declaration property
+ * @return {String}
+ */
+const parseCommaParams = (params) => {
   return postcss.list.comma(params)
-    .map((param) => parseParam(param))
+    .map((param) => parseSpaceParams(param))
     .join(', ')
 }
 
+/**
+ * Get rule from atRule, or make new and put it in atRule
+ * @param {Object} atRule 
+ * @param {String} selector 
+ * @return {Object} new rule
+ */
+const setNewRule = (atRule, selector) => {
+  if (atRule.nodes)
+    for (const rule of atRule.nodes)
+      if (rule.selector === selector)
+        return rule
+  const rule = postcss.rule({selector})
+  atRule.append(rule)
+  return rule
+}
 
-const simpleMedia = postcss.plugin('postcss-simple-media', (opts = { }) => {
-  const atrule = opts.atrule || 'sm'
-  const prop = opts.atrule || 'media'
-  return (root) => {
-    const stack = new Map()
+/**
+ * Check, if rule has no same decl, then put they in
+ * @param {Object} rule 
+ * @param {Object} decl 
+ */
+const addDeclInRule = (rule, decl) => {
+  if (rule.nodes)
+    for (const {prop, value} of rule.nodes)
+      if (prop === decl.prop && value === decl.value)
+        return
+  rule.append(decl)
+}
 
-    root.walkRules((rule) => {
-      let newAtRule, params, newRule
+const walkDecls = (prop, root) => {
+  const atRulesStack = new Map()
 
-      rule.walkDecls((decl) => {
-        if (decl.prop === prop) {
-          if (newAtRule) {
-            newAtRule.append(newRule)
-            stack.set(params, newAtRule)
-          }
+  root.walkRules((rule) => {
+    const selector = rule.selector
+    let newAtRule, params, newRule
 
-          params = makeParams(decl.value)
-          newAtRule = stack.has(params)
-            ? stack.get(params)
-            : postcss.atRule({name: 'media', params})
+    rule.walkDecls((decl) => {
+      if (decl.prop === prop) {
+        // If new media, add previos in atRulesStack
+        if (newAtRule)
+          atRulesStack.set(params, newAtRule)
 
-          newRule = postcss.rule({selector: rule.selector})
-          decl.remove()
-          return
-        }
-        if (newRule) newRule.append(decl)
-      })
+        params = parseCommaParams(decl.value)
+        newAtRule = atRulesStack.has(params)
+          ? atRulesStack.get(params)
+          : postcss.atRule({name: 'media', params})
 
-      if (newAtRule) {
-        newAtRule.append(newRule)
-        stack.set(params, newAtRule)
+        newRule = setNewRule(newAtRule, selector)
+        decl.remove()
+        return
       }
+      if (newRule)
+        addDeclInRule(newRule, decl)
     })
-    
-    Array.from(stack).forEach(([_, atRule]) => root.append(atRule))
 
+    if (newAtRule)
+      atRulesStack.set(params, newAtRule)
+
+  })
+  Array.from(atRulesStack).forEach(([_, atRule]) => root.append(atRule))
+}
+
+
+const simpleMedia = postcss.plugin('postcss-simple-media', (opts = {}) => {
+  const prop = opts.prop || 'media'
+  return (root) => {
+    walkDecls(prop, root)
   }
 })
 
