@@ -8,80 +8,63 @@ All styles properties declared after the media property<br>
 to the end of the rule or to the next media property,<br>
 will be placed in the media query with the specified parameters
 
+### Exemple
 ```css
-
-.row {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin: auto;
-
-  media: 1200+;
-  width: 80%;
-  
-  media: 960-;
-  width: 100%;
-  height: 100%;
-}
-
-.col {
-  width: 10%;
-
-  media: 960-, (orientation: landscape);
+/*** Before ***/
+.box {
   width: 20%;
 
-  media: only screen 480-640;
+  media: 960-;
   width: 25%;
 
-  media: !handheld
-  font-size: 1.5
+  media: 560-800;
+  width: 50%;
+
+  media: 380+;
+  width: 100%;
 }
 
-```
-
-```css
-.row {
-  display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  margin: auto;
-}
-
-.col {
-  width: 10%;
-}
-
-@media (min-width: 1200px) {
-  .row {
-    width: 80%;
-  }
+/*** After ***/
+.box {
+  width: 20%;
 }
 
 @media (max-width: 960px) {
-  .row {
-    width: 100%;
-    height: 100%;
-  }
-}
-
-@media (max-width: 960px), (orientation: landscape) {
-  .col {
-    width: 20%;
-  }
-}
-
-@media only screen and (min-width: 480px) and (max-width: 640px) {
-  .col {
+  .box {
     width: 25%;
   }
 }
 
-@media not handheld {
-  .col {
-    font-size: 1.5;
+@media (min-width: 560px) and (max-width: 800px) {
+  .box {
+    width: 50%;
   }
 }
+
+@media (min-width: 380px) {
+  .box {
+    width: 100%;
+  }
+}
+
 ```
+### Some rules
+- Space will be replaced with a keyword `and`
+- Comma (,) will stay like `comma (,)`
+- Exclamation mark (!) will be replaced with a keyword `not`
+- Renge of widths mast be without spaces: `560-1200` not `560 - 1200`
+
+### More Exemles
+| media:                   | @media                                    |
+|:-------------------------|:------------------------------------------|
+| 1200                     | (width: 1200px)                           |
+| 1600-                    | (max-width: 1600px)                       |
+| 860+                     | (min-width: 860px)                        |
+| 380-960                  | (min-width: 380px) and (min-width: 960px) |
+| 960-380                  | (min-width: 380px) and (min-width: 960px) |
+| all 960-                 | all and (max-width: 960px)                |
+| (orientation: landscape) | (orientation: landscape)                  |
+| only screen, !print      | only screen, not print                    |
 
 ## Usage
 
@@ -91,11 +74,21 @@ or `postcss` in bundle config.
 
 If you already use PostCSS, add the plugin to plugins list:
 
-```diff
+```javascript
 module.exports = {
   plugins: [
-+   require('postcss-simle-media'),
-    require('autoprefixer')
+    require('postcss-simle-media')
+  ]
+}
+```
+If you whant use another word of property, not `media:`
+<br>Just pass in plugin argument object width name property `prop`,
+<br>and value that you whant. Value can be `String` or `Regular Expression`
+
+```javascript
+module.exports = {
+  plugins: [
+    require('postcss-simle-media')({prop: 'simple-media'})
   ]
 }
 ```

@@ -1,16 +1,16 @@
 let postcss = require('postcss')
 
-const isRange = /^\d+-\d+$/
-const isLimit = /^(\d+)([+-])?$/
-const inBrackets = /^\((.+)\)$/
-const isNot = /^!(.+)$/
-
 /**
  * Parse splittet by comma and space input
  * @param {String} arg value of declaration property
  * @return {String} params of media query
  */
 const makeMedia = (arg) => {
+  const inBrackets = /^\((.+)\)$/
+  const isRange = /^\d+-\d+$/
+  const isLimit = /^(\d+)([+-])?$/
+  const isNot = /^!(.+)$/
+
   if (inBrackets.test(arg)) {
     let match = arg.match(inBrackets)
     return `(${makeMedia(match[1]).trim()})`
@@ -94,7 +94,8 @@ const walkDecls = (prop, root) => {
 
     rule.walkDecls((decl) => {
       if (decl.prop === prop) {
-        // If new media, add previos in atRulesStack
+        // If new media, in one rule
+        // add previos in atRulesStack
         if (newAtRule)
           atRulesStack.set(params, newAtRule)
 
