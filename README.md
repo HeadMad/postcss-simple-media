@@ -3,12 +3,17 @@
 [PostCSS] plugin postcss-simple-media.
 
 [PostCSS]: https://github.com/postcss/postcss
-## About
+
 All styles properties declared after the media property<br>
 to the end of the rule or to the next media property,<br>
 will be placed in the media query with the specified parameters
 
-### Exemple
+## Install
+```
+npm install --save-dev HeadMad/postcss-simple-media#1.0
+```
+
+## Exemple
 ```css
 /*** Before ***/
 .box {
@@ -23,7 +28,8 @@ will be placed in the media query with the specified parameters
   media: 380+;
   width: 100%;
 }
-
+```
+```
 /*** After ***/
 .box {
   width: 20%;
@@ -48,13 +54,13 @@ will be placed in the media query with the specified parameters
 }
 
 ```
-### Some rules
+## Some rules
 - Space will be replaced with a keyword `and`
 - Comma (,) will stay like `comma (,)`
 - Exclamation mark (!) will be replaced with a keyword `not`
 - Renge of widths mast be without spaces: `560-1200` not `560 - 1200`
 
-### More Exemles
+## More Exemples
 | media:                   | @media                                    |
 |:-------------------------|:------------------------------------------|
 | 1200                     | (width: 1200px)                           |
@@ -75,20 +81,24 @@ or `postcss` in bundle config.
 If you already use PostCSS, add the plugin to plugins list:
 
 ```javascript
+const simpleMedia = require('postcss-simple-media')
+
 module.exports = {
   plugins: [
-    require('postcss-simle-media')
+    simpleMedia
   ]
 }
 ```
 If you whant use another word of property, not `media:`
-<br>Just pass in plugin argument object width name property `prop`,
+<br>Just pass in plugin argument object width field `prop`,
 <br>and value that you whant. Value can be `String` or `Regular Expression`
 
 ```javascript
+const simpleMedia = require('postcss-simple-media')
+
 module.exports = {
   plugins: [
-    require('postcss-simle-media')({prop: 'simple-media'})
+    simpleMedia({prop: 'simple-media'})
   ]
 }
 ```
