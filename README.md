@@ -33,7 +33,7 @@ npm i --D headmad/postcss-simple-media
   width: 100%;
 }
 ```
-```
+```css
 /*** After ***/
 .box {
   width: 20%;
