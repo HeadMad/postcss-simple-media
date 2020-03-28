@@ -29,7 +29,7 @@ npm install --save-dev HeadMad/postcss-simple-media#1.0
   width: 100%;
 }
 ```
-```
+```css
 /*** After ***/
 .box {
   width: 20%;
