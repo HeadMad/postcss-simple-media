@@ -42,7 +42,8 @@ const parseSpaceParams = (param) => {
   return postcss.list.space(param)
     .map((item) => makeMedia(item))
     .join(' and ')
-    .replace(/\bonly and\b/g, 'only')
+    .replace(/( and\b){2,}/g, ' and')
+    .replace(/\b(only|not) and\b/g, '$1')
 }
 
 /**
