@@ -58,9 +58,10 @@ npm i --D headmad/postcss-simple-media
 }
 
 ```
+
 ## Some rules
-- Space will be replaced with a keyword `and`
-- Comma (,) will stay like `comma (,)`
+For value of media-property you can use standart syntax CSS media-query params, or shortcodes with next rules:
+- Space between the parameters will be replaced with a keyword `and`
 - Exclamation mark (!) will be replaced with a keyword `not`
 - Renge of widths mast be without spaces: `560-1200` not `560 - 1200`
 

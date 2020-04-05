@@ -1,6 +1,10 @@
 {
   "name": "postcss-simple-media",
+<<<<<<< HEAD
   "version": "1.0.2",
+=======
+  "version": "1.0.3",
+>>>>>>> develop
   "description": "PostCSS plugin postcss-simple-media",
   "keywords": [
     "postcss",
