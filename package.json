@@ -1,6 +1,6 @@
 {
   "name": "postcss-simple-media",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "PostCSS plugin postcss-simple-media",
   "keywords": [
     "postcss",
