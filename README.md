@@ -14,7 +14,7 @@ npm install --save-dev postcss-simple-media
 ```
 or
 ```
-npm i --D headmad/postcss-simple-media
+npm -D HeadMad/postcss-simple-media
 ```
 
 ## Exemple
