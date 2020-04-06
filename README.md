@@ -10,7 +10,11 @@ will be placed in the media query with the specified parameters
 
 ## Install
 ```
-npm install --save-dev HeadMad/postcss-simple-media#1.0
+npm install --save-dev postcss-simple-media
+```
+or
+```
+npm - -D HeadMad/postcss-simple-media
 ```
 
 ## Exemple
