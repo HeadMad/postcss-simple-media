@@ -14,7 +14,14 @@
   },
   "author": "HeadMad <kov.ps@yandex.ru>",
   "license": "MIT",
-  "repository": "HeadMad/postcss-simple-media",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/HeadMad/postcss-simple-media.git"
+  },
+  "bugs": {
+    "url": "https://github.com/HeadMad/postcss-simple-media/issues"
+  },
+  "homepage": "https://github.com/HeadMad/postcss-simple-media#readme",
   "dependencies": {
     "postcss": "^7.0.18"
   },
