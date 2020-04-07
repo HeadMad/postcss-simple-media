@@ -112,3 +112,6 @@ If you do not use PostCSS, add it according to [official docs]
 and set this plugin in settings.
 
 [official docs]: https://github.com/postcss/postcss#usage
+
+## License
+MIT
