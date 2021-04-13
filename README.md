@@ -63,7 +63,7 @@ npm -D HeadMad/postcss-simple-media
 For value of media-property you can use standart syntax CSS media-query params, or shortcodes with next rules:
 - Space between the parameters will be replaced with a keyword `and`
 - Exclamation mark (!) will be replaced with a keyword `not`
-- Range of widths mast be without spaces: `560-1200` not `560 - 1200`
+- Range of widths must be without spaces: `560-1200` not `560 - 1200`
 
 ## More Exemples
 | media:                   | @media                                    |
