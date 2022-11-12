@@ -1,4 +1,4 @@
-# Make Your Media Simple
+# Make Your Media Queries Simple
 
 [PostCSS] plugin postcss-simple-media.
 
